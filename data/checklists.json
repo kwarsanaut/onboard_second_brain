@@ -1,0 +1,530 @@
+[
+  {
+    "id": "1779087233290-osschc3",
+    "departmentId": "1779085986851-le3i4gl",
+    "departmentName": "data",
+    "items": [
+      {
+        "title": "Setup Akun Email dan Sistem",
+        "description": "Mengatur akun email dan akses sistem, termasuk Fortinet VPN dan Remote Desktop",
+        "category": "Setup",
+        "isRequired": true,
+        "order": 1,
+        "id": "item-1779087233290-0"
+      },
+      {
+        "title": "Pengenalan Alat dan Tools",
+        "description": "Mempelajari penggunaan alat dan tools seperti Airflow DAG, Jupyter Notebook, dan Docker",
+        "category": "Teknis",
+        "isRequired": true,
+        "order": 2,
+        "id": "item-1779087233290-1"
+      },
+      {
+        "title": "Pemahaman Proses Disbursement",
+        "description": "Mempelajari proses disbursement dan formula yang digunakan, termasuk POS lite Disbursement formula",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 3,
+        "id": "item-1779087233290-2"
+      },
+      {
+        "title": "Kontak dan Relasi Penting",
+        "description": "Mengenal kontak dan relasi penting, termasuk tim data dan stakeholder lainnya",
+        "category": "Komunikasi",
+        "isRequired": true,
+        "order": 4,
+        "id": "item-1779087233290-3"
+      },
+      {
+        "title": "Tanggung Jawab Utama",
+        "description": "Mempahami tanggung jawab utama sebagai karyawan baru, termasuk pengelolaan data dan proses disbursement",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 5,
+        "id": "item-1779087233290-4"
+      },
+      {
+        "title": "Target 30 Hari Pertama",
+        "description": "Mengenal target dan tujuan dalam 30 hari pertama, termasuk mempelajari proses dan alat yang digunakan",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 6,
+        "id": "item-1779087233290-5"
+      },
+      {
+        "title": "Target 60 Hari Pertama",
+        "description": "Mengenal target dan tujuan dalam 60 hari pertama, termasuk mengambil alih tanggung jawab dan memulai proyek baru",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 7,
+        "id": "item-1779087233290-6"
+      },
+      {
+        "title": "Target 90 Hari Pertama",
+        "description": "Mengenal target dan tujuan dalam 90 hari pertama, termasuk menyelesaikan proyek dan memulai evaluasi kinerja",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 8,
+        "id": "item-1779087233290-7"
+      },
+      {
+        "title": "Pengaturan Jupyter Notebook dan Docker",
+        "description": "Mengatur Jupyter Notebook dan Docker untuk penggunaan sehari-hari",
+        "category": "Teknis",
+        "isRequired": true,
+        "order": 9,
+        "id": "item-1779087233290-8"
+      },
+      {
+        "title": "Pengenalan Apache Iceberg dan POC",
+        "description": "Mempelajari Apache Iceberg dan POC untuk penggunaan di masa depan",
+        "category": "Teknis",
+        "isRequired": false,
+        "order": 10,
+        "id": "item-1779087233290-9"
+      },
+      {
+        "title": "Pengaturan Ngrok dan Docker Compose",
+        "description": "Mengatur Ngrok dan Docker Compose untuk penggunaan sehari-hari",
+        "category": "Teknis",
+        "isRequired": true,
+        "order": 11,
+        "id": "item-1779087233290-10"
+      },
+      {
+        "title": "Pengenalan Vercel Frontend dan Hugging Face Space",
+        "description": "Mempelajari Vercel Frontend dan Hugging Face Space untuk penggunaan di masa depan",
+        "category": "Teknis",
+        "isRequired": false,
+        "order": 12,
+        "id": "item-1779087233290-11"
+      }
+    ],
+    "generatedFrom": "Handover List - Sheet1.pdf",
+    "model": "llama-3.3-70b-versatile",
+    "createdAt": "2026-05-18T06:53:53.290Z",
+    "updatedAt": "2026-05-18T06:53:53.290Z"
+  },
+  {
+    "id": "1779096240418-diwdck9",
+    "departmentId": "1779095796266-k4rwu2g",
+    "departmentName": "Kang Kocok",
+    "items": [
+      {
+        "title": "Setup Akses Sistem",
+        "description": "Mendapatkan akses ke Jira Project, Confluence, Figma, Metabase Dashboard, dan Firebase Console",
+        "category": "Setup",
+        "isRequired": true,
+        "order": 1,
+        "id": "item-1779096240417-0"
+      },
+      {
+        "title": "Konfigurasi Email dan Komunikasi",
+        "description": "Mengatur email dan komunikasi dengan tim, termasuk memahami alur komunikasi dan protokol",
+        "category": "Setup",
+        "isRequired": true,
+        "order": 2,
+        "id": "item-1779096240417-1"
+      },
+      {
+        "title": "Pemahaman Proses dan Alur Kerja",
+        "description": "Mempelajari proses dan alur kerja tim, termasuk sprint planning, daily stand-up, dan retrospektif",
+        "category": "Administrasi",
+        "isRequired": true,
+        "order": 3,
+        "id": "item-1779096240417-2"
+      },
+      {
+        "title": "Mengenal Kontak dan Relasi Penting",
+        "description": "Mengenal dan memahami peran serta tanggung jawab masing-masing anggota tim, termasuk Engineering Manager, UI/UX Lead, QA Lead, dan Business Lead",
+        "category": "Komunikasi",
+        "isRequired": true,
+        "order": 4,
+        "id": "item-1779096240417-3"
+      },
+      {
+        "title": "Pemahaman Tanggung Jawab Utama",
+        "description": "Mempelajari dan memahami tanggung jawab utama sebagai Product Owner, termasuk prioritisasi fitur, monitoring progres, dan pengambilan keputusan",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 5,
+        "id": "item-1779096240417-4"
+      },
+      {
+        "title": "Target 30 Hari Pertama",
+        "description": "Mempelajari dan memahami target 30 hari pertama, termasuk memprioritaskan monitoring integrasi payment gateway dan melakukan weekly sync dengan Engineering Manager",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 6,
+        "id": "item-1779096240417-5"
+      },
+      {
+        "title": "Pemahaman Fitur dan Status",
+        "description": "Mempelajari dan memahami fitur dan status produk, termasuk Expense Tracker, Budget Planning, E-Wallet Sync, dan Investment Dashboard",
+        "category": "Teknis",
+        "isRequired": true,
+        "order": 7,
+        "id": "item-1779096240417-6"
+      },
+      {
+        "title": "Pemahaman Risiko dan Masalah",
+        "description": "Mempelajari dan memahami risiko dan masalah yang ada, termasuk dependensi API dari vendor payment gateway, kekurangan resource developer, dan potensi delay release",
+        "category": "Teknis",
+        "isRequired": true,
+        "order": 8,
+        "id": "item-1779096240417-7"
+      },
+      {
+        "title": "Pemahaman Dokumentasi dan Sistem",
+        "description": "Mempelajari dan memahami dokumentasi dan sistem yang digunakan, termasuk Jira Project, Confluence, Figma, dan Metabase Dashboard",
+        "category": "Administrasi",
+        "isRequired": true,
+        "order": 9,
+        "id": "item-1779096240417-8"
+      },
+      {
+        "title": "Target 60 Hari Pertama",
+        "description": "Mempelajari dan memahami target 60 hari pertama, termasuk memprioritaskan penyelesaian bug critical dan melakukan review backlog prioritas tinggi",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 10,
+        "id": "item-1779096240417-9"
+      },
+      {
+        "title": "Target 90 Hari Pertama",
+        "description": "Mempelajari dan memahami target 90 hari pertama, termasuk memprioritaskan monitoring conversion funnel onboarding dan melakukan evaluasi progres",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 11,
+        "id": "item-1779096240417-10"
+      },
+      {
+        "title": "Pemahaman Stakeholder dan PIC",
+        "description": "Mempelajari dan memahami peran serta tanggung jawab stakeholder dan PIC, termasuk Engineering Manager, UI/UX Lead, QA Lead, dan Business Lead",
+        "category": "Komunikasi",
+        "isRequired": true,
+        "order": 12,
+        "id": "item-1779096240417-11"
+      },
+      {
+        "title": "Pemahaman Proses Pengambilan Keputusan",
+        "description": "Mempelajari dan memahami proses pengambilan keputusan, termasuk memprioritaskan fitur, monitoring progres, dan pengambilan keputusan",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 13,
+        "id": "item-1779096240418-12"
+      },
+      {
+        "title": "Pemahaman Metode Kerja Tim",
+        "description": "Mempelajari dan memahami metode kerja tim, termasuk sprint planning, daily stand-up, dan retrospektif",
+        "category": "Administrasi",
+        "isRequired": true,
+        "order": 14,
+        "id": "item-1779096240418-13"
+      },
+      {
+        "title": "Pemahaman Alur Komunikasi",
+        "description": "Mempelajari dan memahami alur komunikasi, termasuk memahami protokol dan saluran komunikasi yang digunakan",
+        "category": "Komunikasi",
+        "isRequired": true,
+        "order": 15,
+        "id": "item-1779096240418-14"
+      }
+    ],
+    "generatedFrom": "fiktif_handover_product_owner.pdf",
+    "model": "llama-3.3-70b-versatile",
+    "createdAt": "2026-05-18T09:24:00.418Z",
+    "updatedAt": "2026-05-18T09:24:00.418Z"
+  },
+  {
+    "id": "1779275067043-wxq7r8j",
+    "positionId": "1779275048758-bwsdg0p",
+    "positionName": "data",
+    "departmentId": "1779275048758-bwsdg0p",
+    "departmentName": "poslite",
+    "onboardingType": "new-hire",
+    "additionalCategories": [
+      "it-setup",
+      "hr-admin",
+      "team-intro"
+    ],
+    "items": [
+      {
+        "id": "item-1779275064725-2",
+        "title": "Mengakses Remote Desktop (Teknis)",
+        "description": "",
+        "category": "Teknis",
+        "isRequired": true,
+        "order": 1,
+        "source": "document"
+      },
+      {
+        "id": "item-1779275064725-3",
+        "title": "Mengatur Akses AWS ETL Server (Teknis)",
+        "description": "",
+        "category": "Teknis",
+        "isRequired": true,
+        "order": 2,
+        "source": "document"
+      },
+      {
+        "id": "item-1779275064725-4",
+        "title": "Mengakses Jupyter Notebook (Teknis)",
+        "description": "",
+        "category": "Teknis",
+        "isRequired": true,
+        "order": 3,
+        "source": "document"
+      },
+      {
+        "id": "item-1779275064725-5",
+        "title": "Mengatur Docker Compose (Teknis)",
+        "description": "",
+        "category": "Teknis",
+        "isRequired": true,
+        "order": 4,
+        "source": "document"
+      },
+      {
+        "id": "item-1779275064725-6",
+        "title": "Mengakses Airflow DAG (Operasional)",
+        "description": "",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 5,
+        "source": "document"
+      },
+      {
+        "id": "item-1779275064725-7",
+        "title": "Mengatur Proses ETL (Operasional)",
+        "description": "",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 6,
+        "source": "document"
+      },
+      {
+        "id": "item-1779275064725-8",
+        "title": "Mengakses Location Insight (Operasional)",
+        "description": "",
+        "category": "Operasional",
+        "isRequired": true,
+        "order": 7,
+        "source": "document"
+      },
+      {
+        "id": "item-1779275064725-9",
+        "title": "Mengatur Komunikasi dengan Tim (Komunikasi)",
+        "description": "",
+        "category": "Komunikasi",
+        "isRequired": true,
+        "order": 8,
+        "source": "document"
+      },
+      {
+        "id": "item-1779275064725-10",
+        "title": "Mengatur Target 30 Hari Pertama (Administrasi)",
+        "description": "",
+        "category": "Administrasi",
+        "isRequired": true,
+        "order": 9,
+        "source": "document"
+      },
+      {
+        "id": "item-1779275064725-11",
+        "title": "Mengatur Target 60 Hari Pertama (Administrasi)",
+        "description": "",
+        "category": "Administrasi",
+        "isRequired": true,
+        "order": 10,
+        "source": "document"
+      },
+      {
+        "id": "item-1779275064725-12",
+        "title": "Mengatur Target 90 Hari Pertama (Administrasi)",
+        "description": "",
+        "category": "Administrasi",
+        "isRequired": true,
+        "order": 11,
+        "source": "document"
+      },
+      {
+        "id": "item-1779276342433-wiki-13",
+        "title": "Mengenal Tim Data",
+        "description": "Team data ada Fajar, Pesoy, Arsa",
+        "category": "Komunikasi",
+        "isRequired": true,
+        "order": 12,
+        "source": "document"
+      },
+      {
+        "title": "Penerimaan dan setup laptop/komputer",
+        "description": "Menerima dan mengatur laptop/komputer yang disediakan oleh perusahaan",
+        "category": "Setup IT & Akses",
+        "isRequired": true,
+        "order": 13,
+        "id": "item-1779276344686-0",
+        "source": "additional"
+      },
+      {
+        "title": "Pembuatan akun email perusahaan",
+        "description": "Membuat akun email perusahaan untuk komunikasi internal dan eksternal",
+        "category": "Setup IT & Akses",
+        "isRequired": true,
+        "order": 14,
+        "id": "item-1779276344686-1",
+        "source": "additional"
+      },
+      {
+        "title": "Setup VPN dan remote access",
+        "description": "Mengatur akses VPN dan remote access untuk bekerja dari jarak jauh",
+        "category": "Setup IT & Akses",
+        "isRequired": true,
+        "order": 15,
+        "id": "item-1779276344686-2",
+        "source": "additional"
+      },
+      {
+        "title": "Akses ke sistem dan tools internal",
+        "description": "Mendapatkan akses ke sistem dan tools internal perusahaan",
+        "category": "Setup IT & Akses",
+        "isRequired": true,
+        "order": 16,
+        "id": "item-1779276344686-3",
+        "source": "additional"
+      },
+      {
+        "title": "Badge/kartu akses gedung",
+        "description": "Menerima badge/kartu akses gedung untuk masuk ke kantor",
+        "category": "Setup IT & Akses",
+        "isRequired": true,
+        "order": 17,
+        "id": "item-1779276344686-4",
+        "source": "additional"
+      },
+      {
+        "title": "Setup software wajib",
+        "description": "Mengatur software wajib yang dibutuhkan untuk pekerjaan",
+        "category": "Setup IT & Akses",
+        "isRequired": true,
+        "order": 18,
+        "id": "item-1779276344686-5",
+        "source": "additional"
+      },
+      {
+        "title": "Penandatanganan kontrak kerja",
+        "description": "Menandatangani kontrak kerja dengan perusahaan",
+        "category": "Administrasi HR",
+        "isRequired": true,
+        "order": 19,
+        "id": "item-1779276344686-6",
+        "source": "additional"
+      },
+      {
+        "title": "Pendaftaran BPJS Kesehatan & Ketenagakerjaan",
+        "description": "Mendaftar BPJS Kesehatan dan Ketenagakerjaan untuk keamanan sosial",
+        "category": "Administrasi HR",
+        "isRequired": true,
+        "order": 20,
+        "id": "item-1779276344686-7",
+        "source": "additional"
+      },
+      {
+        "title": "Setup informasi payroll & rekening bank",
+        "description": "Mengatur informasi payroll dan rekening bank untuk gaji",
+        "category": "Administrasi HR",
+        "isRequired": true,
+        "order": 21,
+        "id": "item-1779276344686-8",
+        "source": "additional"
+      },
+      {
+        "title": "Pemahaman kebijakan cuti & izin",
+        "description": "Memahami kebijakan cuti dan izin perusahaan",
+        "category": "Administrasi HR",
+        "isRequired": true,
+        "order": 22,
+        "id": "item-1779276344686-9",
+        "source": "additional"
+      },
+      {
+        "title": "Pengenalan kebijakan perusahaan (code of conduct)",
+        "description": "Memahami kebijakan perusahaan dan code of conduct",
+        "category": "Administrasi HR",
+        "isRequired": true,
+        "order": 23,
+        "id": "item-1779276344686-10",
+        "source": "additional"
+      },
+      {
+        "title": "Pengisian formulir-formulir HR",
+        "description": "Mengisi formulir-formulir HR yang dibutuhkan",
+        "category": "Administrasi HR",
+        "isRequired": true,
+        "order": 24,
+        "id": "item-1779276344686-11",
+        "source": "additional"
+      },
+      {
+        "title": "Perkenalan dengan direct manager",
+        "description": "Bertemu dengan direct manager untuk memahami tugas dan tanggung jawab",
+        "category": "Perkenalan Tim",
+        "isRequired": true,
+        "order": 25,
+        "id": "item-1779276344686-12",
+        "source": "additional"
+      },
+      {
+        "title": "Perkenalan dengan anggota tim langsung",
+        "description": "Bertemu dengan anggota tim langsung untuk memahami struktur tim",
+        "category": "Perkenalan Tim",
+        "isRequired": true,
+        "order": 26,
+        "id": "item-1779276344686-13",
+        "source": "additional"
+      },
+      {
+        "title": "Identifikasi key stakeholders di luar tim",
+        "description": "Mengidentifikasi key stakeholders di luar tim yang berhubungan dengan pekerjaan",
+        "category": "Perkenalan Tim",
+        "isRequired": true,
+        "order": 27,
+        "id": "item-1779276344686-14",
+        "source": "additional"
+      },
+      {
+        "title": "Setup dengan buddy/mentor",
+        "description": "Mendapatkan buddy/mentor untuk membantu dalam pekerjaan",
+        "category": "Perkenalan Tim",
+        "isRequired": true,
+        "order": 28,
+        "id": "item-1779276344686-15",
+        "source": "additional"
+      },
+      {
+        "title": "Sesi 1-on-1 dengan manager minggu pertama",
+        "description": "Mengadakan sesi 1-on-1 dengan manager pada minggu pertama untuk memahami tugas dan tanggung jawab",
+        "category": "Perkenalan Tim",
+        "isRequired": true,
+        "order": 29,
+        "id": "item-1779276344686-16",
+        "source": "additional"
+      },
+      {
+        "title": "Pemahaman struktur organisasi tim",
+        "description": "Memahami struktur organisasi tim dan peran masing-masing anggota",
+        "category": "Perkenalan Tim",
+        "isRequired": true,
+        "order": 30,
+        "id": "item-1779276344686-17",
+        "source": "additional"
+      }
+    ],
+    "generatedFrom": "Manual notes",
+    "model": "llama-3.3-70b-versatile",
+    "wikiRevisions": 2,
+    "createdAt": "2026-05-20T11:04:27.043Z",
+    "updatedAt": "2026-05-20T11:26:03.789Z"
+  }
+]
