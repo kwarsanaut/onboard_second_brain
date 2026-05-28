@@ -18,24 +18,48 @@ export default function RegisterPage() {
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (form.password !== form.confirm) { setError('Password tidak cocok'); return; }
     if (form.password.length < 6) { setError('Password minimal 6 karakter'); return; }
     setLoading(true); setError('');
-    const { error } = await createClient().auth.signUp({
+    const { data, error } = await createClient().auth.signUp({
       email: form.email, password: form.password,
       options: { data: { full_name: form.name, role }, emailRedirectTo: `${location.origin}/auth/callback` },
     });
     setLoading(false);
     if (error) { setError(error.message); return; }
-    router.push(role === 'hr' ? '/hr' : '/employee');
-    router.refresh();
+    // Jika email confirmation dimatikan, langsung redirect
+    if (data.session) {
+      router.push(role === 'hr' ? '/hr' : '/employee');
+      router.refresh();
+    } else {
+      // Email confirmation masih aktif — tampilkan pesan
+      setSuccess(true);
+    }
   }
 
   const inp = "w-full h-10 bg-white/[0.05] border border-white/[0.1] rounded-lg px-3.5 text-sm text-white placeholder-stone-600 outline-none focus:border-orange-500/60 focus:bg-white/[0.07] focus:ring-2 focus:ring-orange-500/10 transition-all duration-150";
   const lbl = "block text-xs font-semibold text-stone-300 mb-2 tracking-wide";
+
+  if (success) return (
+    <div className="w-full max-w-[360px] text-center">
+      <div className="w-14 h-14 rounded-2xl bg-orange-500/15 border border-orange-500/20 flex items-center justify-center text-2xl mx-auto mb-5">📧</div>
+      <h1 className="text-xl font-black text-white mb-2">Cek email kamu!</h1>
+      <p className="text-stone-400 text-sm leading-relaxed mb-6">
+        Kami kirim link konfirmasi ke <strong className="text-white">{form.email}</strong>. Klik link tersebut untuk mengaktifkan akun.
+      </p>
+      <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-4 mb-6 text-left">
+        <p className="text-xs font-bold text-orange-400 mb-1">💡 Tips untuk hackathon</p>
+        <p className="text-xs text-stone-400">Matikan konfirmasi email di Supabase: <br/><strong className="text-stone-300">Authentication → Providers → Email → nonaktifkan "Confirm email"</strong></p>
+      </div>
+      <Link href="/login" className="inline-flex items-center gap-2 h-10 px-5 bg-white/[0.05] hover:bg-white/[0.08] border border-white/[0.1] text-white text-sm font-semibold rounded-lg transition-all duration-150">
+        ← Ke Halaman Login
+      </Link>
+    </div>
+  );
 
   return (
     <div className="w-full max-w-[360px]">
