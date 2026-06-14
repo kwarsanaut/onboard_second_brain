@@ -1,5 +1,6 @@
 import { createServiceClient } from '@/lib/supabase/server';
-import type { Department, Position, ChecklistTemplate, UserOnboarding, AdditionalCategory, TeamMember } from '@/types';
+import { generateId } from '@/lib/utils';
+import type { Department, Position, ChecklistTemplate, UserOnboarding, AdditionalCategory, TeamMember, Assessment, AssessmentQuestion, OngoingTest, OngoingTestStatus } from '@/types';
 
 function db() {
   return createServiceClient();
@@ -155,8 +156,8 @@ export async function getTeamMembers(departmentId: string): Promise<TeamMember[]
 
 export async function saveTeamMember(m: TeamMember): Promise<void> {
   await db().from('team_members').upsert({
-    id: m.id, department_id: m.departmentId, department_name: m.departmentName,
-    name: m.name, role: m.role, photo_url: m.photoUrl ?? null, created_at: m.createdAt,
+    id: m.id, department_id: m.departmentId, department: m.departmentName,
+    name: m.name, position: m.role, photo_url: m.photoUrl ?? null, created_at: m.createdAt,
   });
 }
 
@@ -167,8 +168,8 @@ export async function deleteTeamMember(id: string): Promise<void> {
 function mapTeamMember(r: Record<string, unknown>): TeamMember {
   return {
     id: r.id as string, departmentId: r.department_id as string,
-    departmentName: r.department_name as string, name: r.name as string,
-    role: r.role as string, photoUrl: r.photo_url as string | undefined,
+    departmentName: r.department as string, name: r.name as string,
+    role: r.position as string, photoUrl: r.photo_url as string | undefined,
     createdAt: r.created_at as string,
   };
 }
@@ -187,5 +188,121 @@ function mapUser(r: Record<string, unknown>): UserOnboarding {
     startDate: r.start_date as string,
     items: (r.items as UserOnboarding['items']) ?? [],
     createdAt: r.created_at as string,
+  };
+}
+
+// ── Assessments (tr_assessment / tr_question / tr_ongoing_test) ───────────────
+
+export async function getAssessments(): Promise<Assessment[]> {
+  const { data } = await db().from('tr_assessment').select('*').order('created_at', { ascending: false });
+  return (data ?? []).map(mapAssessment);
+}
+
+export async function getAssessmentById(id: number): Promise<Assessment | null> {
+  const { data } = await db().from('tr_assessment').select('*').eq('id', id).maybeSingle();
+  return data ? mapAssessment(data) : null;
+}
+
+export async function createAssessment(a: Omit<Assessment, 'id' | 'createdAt'>): Promise<Assessment> {
+  const { data, error } = await db().from('tr_assessment').insert({
+    tittle: a.title, description: a.description, duration: a.duration, threshold: a.threshold,
+  }).select().single();
+  if (error) throw new Error(error.message);
+  return mapAssessment(data);
+}
+
+export async function updateAssessment(id: number, a: Partial<Omit<Assessment, 'id' | 'createdAt'>>): Promise<Assessment> {
+  const patch: Record<string, unknown> = {};
+  if (a.title !== undefined) patch.tittle = a.title;
+  if (a.description !== undefined) patch.description = a.description;
+  if (a.duration !== undefined) patch.duration = a.duration;
+  if (a.threshold !== undefined) patch.threshold = a.threshold;
+  const { data, error } = await db().from('tr_assessment').update(patch).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return mapAssessment(data);
+}
+
+export async function deleteAssessment(id: number): Promise<void> {
+  await db().from('tr_question').delete().eq('assessment_id', id);
+  await db().from('tr_assessment').delete().eq('id', id);
+}
+
+function mapAssessment(r: Record<string, unknown>): Assessment {
+  return {
+    id: r.id as number, title: r.tittle as string, description: (r.description as string) ?? '',
+    duration: r.duration as number, threshold: r.threshold as number, createdAt: r.created_at as string,
+  };
+}
+
+export async function getQuestions(assessmentId: number): Promise<AssessmentQuestion[]> {
+  const { data } = await db().from('tr_question').select('*').eq('assessment_id', assessmentId).order('created_at');
+  return (data ?? []).map(mapQuestion);
+}
+
+export async function createQuestion(q: Omit<AssessmentQuestion, 'id' | 'createdAt'>): Promise<AssessmentQuestion> {
+  const { data, error } = await db().from('tr_question').insert({
+    assessment_id: q.assessmentId, question_text: q.questionText, options: q.options,
+    correct_answer: q.correctAnswer, points: q.points,
+  }).select().single();
+  if (error) throw new Error(error.message);
+  return mapQuestion(data);
+}
+
+export async function updateQuestion(id: number, q: Partial<Omit<AssessmentQuestion, 'id' | 'assessmentId' | 'createdAt'>>): Promise<AssessmentQuestion> {
+  const patch: Record<string, unknown> = {};
+  if (q.questionText !== undefined) patch.question_text = q.questionText;
+  if (q.options !== undefined) patch.options = q.options;
+  if (q.correctAnswer !== undefined) patch.correct_answer = q.correctAnswer;
+  if (q.points !== undefined) patch.points = q.points;
+  const { data, error } = await db().from('tr_question').update(patch).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return mapQuestion(data);
+}
+
+export async function deleteQuestion(id: number): Promise<void> {
+  await db().from('tr_question').delete().eq('id', id);
+}
+
+function mapQuestion(r: Record<string, unknown>): AssessmentQuestion {
+  return {
+    id: r.id as number, assessmentId: r.assessment_id as number, questionText: r.question_text as string,
+    options: (r.options as string[]) ?? [], correctAnswer: r.correct_answer as string,
+    points: r.points as number, createdAt: r.created_at as string,
+  };
+}
+
+export async function createOngoingTest(userId: string, assessmentId: number): Promise<OngoingTest> {
+  const row = {
+    id: generateId(), user_id: userId, assessment_id: assessmentId,
+    start_time: new Date().toISOString(), status: 0 as OngoingTestStatus,
+  };
+  const { data, error } = await db().from('tr_ongoing_test').insert(row).select().single();
+  if (error) throw new Error(error.message);
+  return mapOngoingTest(data);
+}
+
+export async function getOngoingTest(id: string): Promise<OngoingTest | null> {
+  const { data } = await db().from('tr_ongoing_test').select('*').eq('id', id).maybeSingle();
+  return data ? mapOngoingTest(data) : null;
+}
+
+export async function finishOngoingTest(id: string, status: OngoingTestStatus): Promise<OngoingTest> {
+  const { data, error } = await db().from('tr_ongoing_test').update({
+    end_time: new Date().toISOString(), status,
+  }).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return mapOngoingTest(data);
+}
+
+export async function getOngoingTestsByUser(userId: string): Promise<OngoingTest[]> {
+  const { data } = await db().from('tr_ongoing_test').select('*').eq('user_id', userId).order('created_at', { ascending: false });
+  return (data ?? []).map(mapOngoingTest);
+}
+
+function mapOngoingTest(r: Record<string, unknown>): OngoingTest {
+  return {
+    id: r.id as string, userId: r.user_id as string, assessmentId: r.assessment_id as number,
+    startTime: r.start_time as string, endTime: r.end_time as string | undefined,
+    status: r.status as OngoingTestStatus, createdAt: r.created_at as string,
   };
 }

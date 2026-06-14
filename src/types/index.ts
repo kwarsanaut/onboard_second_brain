@@ -88,6 +88,39 @@ export interface QuizQuestion {
   photoUrl?: string;   // untuk eye-crop
 }
 
+// Assessment bank (tr_assessment / tr_question / tr_ongoing_test)
+export const ONGOING_TEST_STATUS = { IN_PROGRESS: 0, PASSED: 1, FAILED: 2 } as const;
+export type OngoingTestStatus = typeof ONGOING_TEST_STATUS[keyof typeof ONGOING_TEST_STATUS];
+
+export interface Assessment {
+  id: number;
+  title: string;
+  description: string;
+  duration: number; // minutes
+  threshold: number; // pass score, percent (0-100)
+  createdAt: string;
+}
+
+export interface AssessmentQuestion {
+  id: number;
+  assessmentId: number;
+  questionText: string;
+  options: string[];
+  correctAnswer: string;
+  points: number;
+  createdAt: string;
+}
+
+export interface OngoingTest {
+  id: string;
+  userId: string;
+  assessmentId: number;
+  startTime: string;
+  endTime?: string;
+  status: OngoingTestStatus;
+  createdAt: string;
+}
+
 // Models
 type GroqModelId = 'llama-3.3-70b-versatile' | 'llama-3.1-8b-instant' | 'mixtral-8x7b-32768' | 'qwen-qwq-32b';
 type QwenModelId = 'qwen-plus' | 'qwen-turbo' | 'qwen-max' | 'qwq-32b';
