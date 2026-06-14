@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const positionId = formData.get('positionId') as string;
     const model = 'llama-3.3-70b-versatile';
-    const onboardingType = 'replacement';
+    const onboardingType = 'replacement' as const;
     const file = formData.get('file') as File | null;
     const manualNotes = formData.get('manualNotes') as string | null;
     const forceNew = formData.get('forceNew') === 'true';
