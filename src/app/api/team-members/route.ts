@@ -28,10 +28,11 @@ export async function POST(req: Request) {
     const path = `${departmentId}/${generateId()}.${ext}`;
     const buffer = Buffer.from(await photo.arrayBuffer());
     const { error } = await supabase.storage.from('team-photos').upload(path, buffer, { contentType: photo.type, upsert: true });
-    if (!error) {
-      const { data } = supabase.storage.from('team-photos').getPublicUrl(path);
-      photoUrl = data.publicUrl;
+    if (error) {
+      return NextResponse.json({ error: `Gagal upload foto: ${error.message}` }, { status: 500 });
     }
+    const { data } = supabase.storage.from('team-photos').getPublicUrl(path);
+    photoUrl = data.publicUrl;
   }
 
   const member = {

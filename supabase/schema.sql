@@ -88,7 +88,7 @@ create table if not exists public.team_members (
 alter table public.team_members disable row level security;
 
 -- Storage bucket untuk foto tim (jalankan sekali)
--- insert into storage.buckets (id, name, public) values ('team-photos', 'team-photos', true) on conflict do nothing;
+insert into storage.buckets (id, name, public) values ('team-photos', 'team-photos', true) on conflict do nothing;
 
 -- Auto-create profile on signup
 create or replace function public.handle_new_user()
