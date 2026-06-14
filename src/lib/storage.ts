@@ -1,5 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/server';
-import type { Department, Position, ChecklistTemplate, UserOnboarding, AdditionalCategory } from '@/types';
+import type { Department, Position, ChecklistTemplate, UserOnboarding, AdditionalCategory, TeamMember } from '@/types';
 
 function db() {
   return createServiceClient();
@@ -137,6 +137,33 @@ export async function saveUser(user: UserOnboarding): Promise<void> {
 
 export async function deleteUser(id: string): Promise<void> {
   await db().from('onboarding_users').delete().eq('id', id);
+}
+
+// ── Team Members ──────────────────────────────────────────────────────────────
+
+export async function getTeamMembers(departmentId: string): Promise<TeamMember[]> {
+  const { data } = await db().from('team_members').select('*').eq('department_id', departmentId).order('created_at');
+  return (data ?? []).map(mapTeamMember);
+}
+
+export async function saveTeamMember(m: TeamMember): Promise<void> {
+  await db().from('team_members').upsert({
+    id: m.id, department_id: m.departmentId, department_name: m.departmentName,
+    name: m.name, role: m.role, photo_url: m.photoUrl ?? null, created_at: m.createdAt,
+  });
+}
+
+export async function deleteTeamMember(id: string): Promise<void> {
+  await db().from('team_members').delete().eq('id', id);
+}
+
+function mapTeamMember(r: Record<string, unknown>): TeamMember {
+  return {
+    id: r.id as string, departmentId: r.department_id as string,
+    departmentName: r.department_name as string, name: r.name as string,
+    role: r.role as string, photoUrl: r.photo_url as string | undefined,
+    createdAt: r.created_at as string,
+  };
 }
 
 function mapUser(r: Record<string, unknown>): UserOnboarding {

@@ -69,6 +69,23 @@ create table if not exists public.profiles (
 
 alter table public.profiles disable row level security;
 
+-- ── Team Members ──────────────────────────────────────────────────────────────
+
+create table if not exists public.team_members (
+  id              text primary key,
+  department_id   text not null references public.departments(id) on delete cascade,
+  department_name text not null,
+  name            text not null,
+  role            text not null default '',
+  photo_url       text,
+  created_at      timestamptz default now()
+);
+
+alter table public.team_members disable row level security;
+
+-- Storage bucket untuk foto tim (jalankan sekali)
+-- insert into storage.buckets (id, name, public) values ('team-photos', 'team-photos', true) on conflict do nothing;
+
 -- Auto-create profile on signup
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer as $$

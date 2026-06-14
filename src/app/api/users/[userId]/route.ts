@@ -12,12 +12,15 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ userId
   const { userId } = await params;
   const user = await getUser(userId);
   if (!user) return NextResponse.json({ error: 'Tidak ditemukan' }, { status: 404 });
-  const { itemId, completed, notes } = await req.json();
+  const { itemId, completed, notes, verified } = await req.json();
+  const now = new Date().toISOString();
   const updated = {
     ...user,
     items: user.items.map(item => item.id !== itemId ? item : {
-      ...item, completed, notes: notes ?? item.notes,
-      completedAt: completed ? new Date().toISOString() : undefined,
+      ...item,
+      ...(completed !== undefined && { completed, completedAt: completed ? now : undefined }),
+      ...(notes !== undefined && { notes }),
+      ...(verified !== undefined && { verified, verifiedAt: verified ? now : undefined }),
     }),
   };
   await saveUser(updated);

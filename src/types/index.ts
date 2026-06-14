@@ -48,6 +48,8 @@ export interface UserChecklistItem extends ChecklistItem {
   completed: boolean;
   completedAt?: string;
   notes?: string;
+  verified?: boolean;
+  verifiedAt?: string;
 }
 
 export interface UserOnboarding {
@@ -62,6 +64,27 @@ export interface UserOnboarding {
   startDate: string;
   items: UserChecklistItem[];
   createdAt: string;
+}
+
+export interface TeamMember {
+  id: string;
+  departmentId: string;
+  departmentName: string;
+  name: string;
+  role: string;
+  photoUrl?: string;
+  createdAt: string;
+}
+
+export interface QuizQuestion {
+  id: string;
+  type: 'team' | 'handover';
+  question: string;
+  options: string[];
+  correctAnswer: string;
+  explanation?: string;
+  memberId?: string;   // untuk team quiz
+  photoUrl?: string;   // untuk eye-crop
 }
 
 // Models

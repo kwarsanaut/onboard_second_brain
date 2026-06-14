@@ -58,7 +58,7 @@ export default function EmployeePage() {
             <div>
               <label className={lbl}>Departemen *</label>
               {departments.length === 0 ? (
-                <div className="border border-stone-200 rounded-lg py-3 text-center text-xs text-stone-400">Hubungi HR</div>
+                <div className="border border-stone-200 rounded-lg py-3 text-center text-xs text-stone-400">Hubungi Manager Tim</div>
               ) : (
                 <div className="grid grid-cols-2 gap-2">
                   {departments.map(d => (

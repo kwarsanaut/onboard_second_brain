@@ -229,7 +229,7 @@ export default async function Home() {
           {/* HR Dashboard mock */}
           <div className="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
             <div className="px-5 py-3 border-b border-stone-100">
-              <p className="text-xs font-bold text-stone-500">HR Dashboard · Engineering</p>
+              <p className="text-xs font-bold text-stone-500">Manager Dashboard · Engineering</p>
             </div>
             <div className="p-5 space-y-3">
               {[

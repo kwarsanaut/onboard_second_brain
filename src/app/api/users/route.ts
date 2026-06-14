@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   if (!position) return NextResponse.json({ error: 'Posisi tidak ditemukan' }, { status: 404 });
 
   const checklist = await getChecklist(positionId);
-  if (!checklist) return NextResponse.json({ error: `Belum ada checklist untuk posisi "${position.name}". Minta HR generate dulu.` }, { status: 400 });
+  if (!checklist) return NextResponse.json({ error: `Belum ada checklist untuk posisi "${position.name}". Minta Manager generate dulu.` }, { status: 400 });
 
   const user = {
     id: generateId(),

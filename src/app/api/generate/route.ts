@@ -3,18 +3,18 @@ import { parseFile, cleanText } from '@/lib/parsers';
 import { generateChecklist, generateChecklistManual, generateAdditionalItems, mergeChecklistWiki } from '@/lib/llm';
 import { saveChecklist, getChecklist, getPosition } from '@/lib/storage';
 import { generateId } from '@/lib/utils';
-import type { ModelId, AdditionalCategory, OnboardingType } from '@/types';
+import type { AdditionalCategory } from '@/types';
 
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const positionId = formData.get('positionId') as string;
-    const model = (formData.get('model') as ModelId) ?? 'llama-3.3-70b-versatile';
+    const model = 'llama-3.3-70b-versatile';
+    const onboardingType = 'replacement';
     const file = formData.get('file') as File | null;
     const manualNotes = formData.get('manualNotes') as string | null;
     const forceNew = formData.get('forceNew') === 'true';
     const replacingPerson = (formData.get('replacingPerson') as string)?.trim() || undefined;
-    const onboardingType = (formData.get('onboardingType') as OnboardingType) ?? 'replacement';
     const additionalCategories: AdditionalCategory[] = JSON.parse(formData.get('additionalCategories') as string ?? '[]');
 
     if (!positionId) return NextResponse.json({ error: 'positionId wajib diisi' }, { status: 400 });

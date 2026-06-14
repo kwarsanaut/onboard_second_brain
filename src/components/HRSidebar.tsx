@@ -21,6 +21,16 @@ const nav = [
       <path d="M12 5v14M5 12h14"/>
     </svg>
   )},
+  { href: '/hr/employees', label: 'Karyawan', icon: (
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+    </svg>
+  )},
+  { href: '/hr/teams', label: 'Anggota Tim', icon: (
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <rect x="3" y="3" width="7" height="7" rx="1"/><path d="M14 5h7M14 9h7M3 14h18M3 18h18"/>
+    </svg>
+  )},
 ];
 
 export default function HRSidebar() {
@@ -34,7 +44,7 @@ export default function HRSidebar() {
           <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white text-xs font-black flex-shrink-0">O</div>
           <div>
             <p className="text-white font-black text-sm leading-none">OnboardKit</p>
-            <span className="text-[10px] text-orange-400/80 font-semibold mt-0.5 inline-block">HR Portal</span>
+            <span className="text-[10px] text-orange-400/80 font-semibold mt-0.5 inline-block">Manager Portal</span>
           </div>
         </div>
       </div>

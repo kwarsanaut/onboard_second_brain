@@ -2,8 +2,7 @@
 import { useEffect, useState, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import type { Department, Position, ChecklistItem, ModelId, AdditionalCategory, OnboardingType } from '@/types';
-import ModelSelector from '@/components/ModelSelector';
+import type { Department, Position, ChecklistItem, AdditionalCategory } from '@/types';
 
 const ADDITIONAL_OPTIONS: { id: AdditionalCategory; label: string; icon: string; desc: string }[] = [
   { id: 'it-setup', label: 'Setup IT & Akses', icon: '💻', desc: 'Laptop, email, VPN, badge, sistem' },
@@ -20,10 +19,8 @@ function UploadForm() {
   const [newPosName, setNewPosName] = useState('');
   const [selectedDept, setSelectedDept] = useState(searchParams.get('dept') ?? '');
   const [selectedPos, setSelectedPos] = useState(searchParams.get('pos') ?? '');
-  const [onboardingType, setOnboardingType] = useState<OnboardingType>('replacement');
   const [replacingPerson, setReplacingPerson] = useState('');
   const [additionalCategories, setAdditionalCategories] = useState<AdditionalCategory[]>(['it-setup', 'hr-admin', 'team-intro']);
-  const [model, setModel] = useState<ModelId>('llama-3.3-70b-versatile');
   const [mode, setMode] = useState<'file' | 'manual'>('file');
   const [file, setFile] = useState<File | null>(null);
   const [manualNotes, setManualNotes] = useState('');
@@ -66,16 +63,13 @@ function UploadForm() {
     setAdditionalCategories(prev => prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]);
   }
 
-  const canSubmit = selectedPos && (mode === 'file' ? !!file : manualNotes.trim().length > 0) &&
-    (onboardingType === 'new-hire' || replacingPerson.trim().length > 0);
+  const canSubmit = selectedPos && (mode === 'file' ? !!file : manualNotes.trim().length > 0) && replacingPerson.trim().length > 0;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true); setError('');
     const body = new FormData();
     body.append('positionId', selectedPos);
-    body.append('model', model);
-    body.append('onboardingType', onboardingType);
     body.append('additionalCategories', JSON.stringify(additionalCategories));
     if (forceNew) body.append('forceNew', 'true');
     if (replacingPerson.trim()) body.append('replacingPerson', replacingPerson.trim());
@@ -215,33 +209,17 @@ function UploadForm() {
           </div>
         </div>
 
-        {/* Step 2: Onboarding type + replacing person */}
+        {/* Step 2: Replacing person */}
         <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-3">
-            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 ${onboardingType === 'new-hire' || replacingPerson.trim() ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400'}`}>{onboardingType === 'new-hire' || replacingPerson.trim() ? '✓' : '2'}</div>
-            <h2 className="font-black text-slate-700 text-sm">Tipe Rekrutmen</h2>
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 ${replacingPerson.trim() ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400'}`}>{replacingPerson.trim() ? '✓' : '2'}</div>
+            <h2 className="font-black text-slate-700 text-sm">Nama Orang yang Digantikan</h2>
           </div>
-          <div className="p-5 space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              {([['replacement', '🔄', 'Replacement', 'Menggantikan orang yang ada'], ['new-hire', '🌱', 'Fresh Hire', 'Posisi baru / tambahan headcount']] as const).map(([type, icon, label, desc]) => (
-                <button key={type} type="button" onClick={() => setOnboardingType(type as OnboardingType)}
-                  className={`p-4 rounded-xl border-2 text-left transition-all ${onboardingType === type ? 'border-indigo-500 bg-indigo-50' : 'border-slate-200 hover:border-slate-300'}`}>
-                  <span className="text-xl block mb-1">{icon}</span>
-                  <p className="text-sm font-black text-slate-800">{label}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">{desc}</p>
-                </button>
-              ))}
-            </div>
-
-            {onboardingType === 'replacement' && (
-              <div>
-                <label className="block text-xs font-bold text-slate-600 mb-1.5">Nama Orang yang Digantikan *</label>
-                <input value={replacingPerson} onChange={e => setReplacingPerson(e.target.value)}
-                  placeholder="cth: Ahmad Fauzi, Budi Santoso..."
-                  className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100" />
-                <p className="text-xs text-slate-400 mt-1">Nama ini dipakai LLM untuk konteks checklist dan ditampilkan ke karyawan baru.</p>
-              </div>
-            )}
+          <div className="p-5">
+            <input value={replacingPerson} onChange={e => setReplacingPerson(e.target.value)}
+              placeholder="cth: Ahmad Fauzi, Budi Santoso..."
+              className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100" />
+            <p className="text-xs text-slate-400 mt-2">Nama ini dipakai AI untuk konteks checklist dan ditampilkan ke karyawan baru.</p>
           </div>
         </div>
 
@@ -306,22 +284,11 @@ function UploadForm() {
           </div>
         </div>
 
-        {/* Step 5: Model */}
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-3">
-            <div className="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-black">✓</div>
-            <h2 className="font-black text-slate-700 text-sm">Model AI</h2>
-          </div>
-          <div className="p-5">
-            <ModelSelector value={model} onChange={setModel} />
-          </div>
-        </div>
-
         {error && <div className="bg-rose-50 border border-rose-200 text-rose-700 rounded-xl px-4 py-3 text-sm">⚠️ {error}</div>}
 
         {!canSubmit && !loading && (
           <p className="text-xs text-slate-400 text-center">
-            {!selectedPos ? 'Pilih posisi dulu' : (onboardingType === 'replacement' && !replacingPerson.trim()) ? 'Isi nama orang yang digantikan' : 'Upload file atau isi catatan'}
+            {!selectedPos ? 'Pilih posisi dulu' : !replacingPerson.trim() ? 'Isi nama orang yang digantikan' : 'Upload file atau isi catatan'}
           </p>
         )}
 

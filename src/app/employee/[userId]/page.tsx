@@ -1,9 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import type { UserOnboarding, UserChecklistItem } from '@/types';
 import { getProgress, formatDate } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import ChatWidget from '@/components/ChatWidget';
 
 type Filter = 'all' | 'todo' | 'done';
 
@@ -80,6 +82,19 @@ export default function EmployeeChecklistPage() {
             <p className="text-xs text-stone-400">{counts.done}/{counts.all} selesai</p>
           </div>
         </div>
+
+        {/* Assessment button */}
+        <Link href={`/employee/${userId}/assessment`}
+          className="mb-4 flex items-center gap-3 bg-gradient-to-r from-orange-50 to-pink-50 border border-orange-200 rounded-xl px-4 py-3 hover:from-orange-100 hover:to-pink-100 transition-all group">
+          <div className="w-9 h-9 rounded-xl bg-orange-500 flex items-center justify-center flex-shrink-0 text-lg">🎯</div>
+          <div className="flex-1">
+            <p className="text-sm font-bold text-stone-800">Mulai Assessment</p>
+            <p className="text-xs text-stone-400">Kuis tebak anggota tim + soal handover</p>
+          </div>
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className="text-stone-300 group-hover:text-orange-400 group-hover:translate-x-0.5 transition-all">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+          </svg>
+        </Link>
 
         {/* Progress bar */}
         <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden">
@@ -248,6 +263,8 @@ export default function EmployeeChecklistPage() {
           </p>
         </div>
       )}
+
+      <ChatWidget user={user} />
     </div>
   );
 }
