@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getUsers, saveUser, getChecklist, getPosition } from '@/lib/storage';
+import { getUsers, getUserByAuthId, saveUser, getChecklist, getPosition } from '@/lib/storage';
 import { generateId } from '@/lib/utils';
+import { createClient } from '@/lib/supabase/server';
 
 export async function GET() {
   return NextResponse.json(await getUsers());
@@ -11,6 +12,14 @@ export async function POST(req: Request) {
   const { name, positionId, startDate } = body;
   if (!name?.trim() || !positionId) return NextResponse.json({ error: 'Nama dan posisi wajib diisi' }, { status: 400 });
 
+  const supabase = await createClient();
+  const { data: { user: authUser } } = await supabase.auth.getUser();
+
+  if (authUser) {
+    const existing = await getUserByAuthId(authUser.id);
+    if (existing) return NextResponse.json(existing, { status: 200 });
+  }
+
   const position = await getPosition(positionId);
   if (!position) return NextResponse.json({ error: 'Posisi tidak ditemukan' }, { status: 404 });
 
@@ -19,6 +28,7 @@ export async function POST(req: Request) {
 
   const user = {
     id: generateId(),
+    authUserId: authUser?.id,
     name: name.trim(),
     positionId,
     positionName: position.name,

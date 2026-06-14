@@ -54,6 +54,7 @@ export interface UserChecklistItem extends ChecklistItem {
 
 export interface UserOnboarding {
   id: string;
+  authUserId?: string;
   name: string;
   positionId: string;
   positionName: string;

@@ -37,6 +37,7 @@ create table if not exists public.checklists (
 
 create table if not exists public.onboarding_users (
   id              text primary key,
+  auth_user_id    uuid references auth.users(id) on delete cascade unique,
   name            text not null,
   position_id     text references public.positions(id) on delete set null,
   position_name   text,
@@ -48,6 +49,9 @@ create table if not exists public.onboarding_users (
   items           jsonb not null default '[]',
   created_at      timestamptz default now()
 );
+
+-- Jika tabel sudah ada sebelumnya (migrasi), tambahkan kolom secara terpisah:
+-- alter table public.onboarding_users add column if not exists auth_user_id uuid references auth.users(id) on delete cascade unique;
 
 -- ── RLS (disable for service role access) ────────────────────────────────────
 -- Service role key bypasses RLS automatically.

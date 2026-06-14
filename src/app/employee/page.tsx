@@ -11,7 +11,19 @@ export default function EmployeePage() {
   const [form, setForm] = useState({ name: '', positionId: '', startDate: '' });
   const [selectedDept, setSelectedDept] = useState('');
   const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetch('/api/users/me').then(async r => {
+      if (r.ok) {
+        const existing = await r.json();
+        router.replace(`/employee/${existing.id}`);
+      } else {
+        setChecking(false);
+      }
+    });
+  }, [router]);
 
   useEffect(() => {
     fetch('/api/departments').then(r => r.json()).then(setDepartments);
@@ -37,6 +49,15 @@ export default function EmployeePage() {
 
   const inp = "w-full h-10 border border-stone-200 rounded-lg px-3.5 text-sm text-stone-900 placeholder-stone-400 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all duration-150 bg-white";
   const lbl = "block text-xs font-semibold text-stone-600 mb-2";
+
+  if (checking) return (
+    <div className="flex items-center justify-center min-h-[calc(100vh-48px)]">
+      <svg className="animate-spin w-6 h-6 text-orange-400" viewBox="0 0 24 24" fill="none">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+      </svg>
+    </div>
+  );
 
   return (
     <div className="min-h-[calc(100vh-48px)] flex items-center justify-center px-4 py-10">

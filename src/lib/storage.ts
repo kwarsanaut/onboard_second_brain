@@ -119,9 +119,16 @@ export async function getUser(id: string): Promise<UserOnboarding | null> {
   return mapUser(data);
 }
 
+export async function getUserByAuthId(authUserId: string): Promise<UserOnboarding | null> {
+  const { data } = await db().from('onboarding_users').select('*').eq('auth_user_id', authUserId).maybeSingle();
+  if (!data) return null;
+  return mapUser(data);
+}
+
 export async function saveUser(user: UserOnboarding): Promise<void> {
   await db().from('onboarding_users').upsert({
     id: user.id,
+    auth_user_id: user.authUserId ?? null,
     name: user.name,
     position_id: user.positionId,
     position_name: user.positionName,
@@ -169,6 +176,7 @@ function mapTeamMember(r: Record<string, unknown>): TeamMember {
 function mapUser(r: Record<string, unknown>): UserOnboarding {
   return {
     id: r.id as string,
+    authUserId: r.auth_user_id as string | undefined,
     name: r.name as string,
     positionId: r.position_id as string,
     positionName: r.position_name as string,
