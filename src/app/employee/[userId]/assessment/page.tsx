@@ -112,7 +112,7 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
                 className="w-full"
                 style={{
                   objectFit: 'cover',
-                  objectPosition: 'center 18%',
+                  objectPosition: 'center 20%',
                   height: '260px',
                   marginTop: '-30px',
                   filter: confirmed ? 'blur(0px)' : 'blur(0px)',
@@ -121,8 +121,8 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
               {/* Overlay hanya tampilkan area mata */}
               {!confirmed && (
                 <>
-                  <div className="absolute inset-0 bg-stone-900" style={{ bottom: '55%' }} />
-                  <div className="absolute inset-0 bg-stone-900" style={{ top: '45%' }} />
+                  <div className="absolute inset-0 bg-stone-900" style={{ bottom: '30%' }} />
+                  <div className="absolute inset-0 bg-stone-900" style={{ top: '25%' }} />
                 </>
               )}
               {confirmed && (
