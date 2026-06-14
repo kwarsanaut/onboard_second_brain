@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const positionId = formData.get('positionId') as string;
-    const model = 'llama-3.3-70b-versatile';
+    const model = 'llama-3.3-70b-versatile' as const;
     const onboardingType = 'replacement' as const;
     const file = formData.get('file') as File | null;
     const manualNotes = formData.get('manualNotes') as string | null;
