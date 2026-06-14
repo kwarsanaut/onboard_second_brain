@@ -109,3 +109,57 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- ── Team Members ──────────────────────────────────────────────────────────────
+
+create table if not exists public.team_members (
+  id            text primary key,
+  name          text not null,
+  position      text,
+  department_id text references public.departments(id) on delete set null,
+  department    text,
+  email         text,
+  phone         text,
+  photo_url     text,
+  bio           text default '',
+  is_active     boolean not null default true,
+  created_at    timestamptz default now(),
+  updated_at    timestamptz default now()
+);
+
+alter table public.team_members disable row level security;
+
+-- ── Storage: team-photos bucket ───────────────────────────────────────────────
+-- Membuat bucket untuk foto anggota tim.
+-- Jalankan bagian ini SEKALI di SQL Editor Supabase.
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'team-photos',
+  'team-photos',
+  true,                          -- public: URL foto bisa diakses tanpa auth
+  5242880,                       -- 5 MB per file
+  array['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+)
+on conflict (id) do update set
+  public            = excluded.public,
+  file_size_limit   = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+-- Storage RLS policies untuk bucket team-photos
+-- Siapapun bisa membaca (public bucket)
+create policy "team-photos: public read"
+  on storage.objects for select
+  using (bucket_id = 'team-photos');
+
+-- Hanya service role / authenticated user yang bisa upload
+create policy "team-photos: authenticated upload"
+  on storage.objects for insert
+  to authenticated
+  with check (bucket_id = 'team-photos');
+
+-- Hanya service role / authenticated user yang bisa hapus
+create policy "team-photos: authenticated delete"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'team-photos');
