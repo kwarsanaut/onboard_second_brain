@@ -113,16 +113,19 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
                 style={{
                   objectFit: 'cover',
                   objectPosition: 'center 20%',
-                  height: '260px',
-                  marginTop: '-30px',
-                  filter: confirmed ? 'blur(0px)' : 'blur(0px)',
+                  height: '100%',
+                  // marginTop: '-30px',
+                  width: '100%',
+                  // filter: confirmed ? 'blur(0px)' : 'blur(0px)',
+                  filter: confirmed ? 'none' : 'none',
                 }}
               />
               {/* Overlay hanya tampilkan area mata */}
               {!confirmed && (
                 <>
-                  <div className="absolute inset-0 bg-stone-900" style={{ bottom: '30%' }} />
-                  <div className="absolute inset-0 bg-stone-900" style={{ top: '25%' }} />
+                  {/* <div className="absolute inset-0 bg-stone-900" style={{ bottom: '30%' }} /> */ }
+                  <div className="absolute inset-x-0 top-0 bg-stone-900" style={{ height: '30%' }} />
+                  <div className="absolute inset-0 bg-stone-900" style={{ top: '55%' }} />
                 </>
               )}
               {confirmed && (
