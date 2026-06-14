@@ -275,6 +275,7 @@ export async function createOngoingTest(userId: string, assessmentId: number): P
   const row = {
     id: generateId(), user_id: userId, assessment_id: assessmentId,
     start_time: new Date().toISOString(), status: 0 as OngoingTestStatus,
+    created_at: new Date().toISOString(),
   };
   const { data, error } = await db().from('tr_ongoing_test').insert(row).select().single();
   if (error) throw new Error(error.message);
