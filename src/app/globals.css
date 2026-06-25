@@ -49,3 +49,40 @@ input, textarea, select, button { font-family: inherit; }
 
 /* Selection */
 ::selection { background: var(--orange-100); color: var(--stone-900); }
+
+/* ─────────────────────────────────────────────────────────────
+   Landing — 3D / motion
+   ───────────────────────────────────────────────────────────── */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-16px); }
+}
+@keyframes floatYsm {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
+}
+@keyframes riseIn {
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseRing {
+  0%   { opacity: .55; transform: scale(.85); }
+  80%  { opacity: 0;   transform: scale(1.7); }
+  100% { opacity: 0;   transform: scale(1.7); }
+}
+@keyframes beamFlow {
+  0%   { transform: translateX(-120%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+@keyframes gridDrift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 40px; }
+}
+
+.scene-3d { transform-style: preserve-3d; }
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe-anim { animation: none !important; }
+}

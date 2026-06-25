@@ -3,13 +3,12 @@ import { getUser, getTeamMembers } from '@/lib/storage';
 import Groq from 'groq-sdk';
 import type { QuizQuestion } from '@/types';
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
 function shuffle<T>(arr: T[]): T[] {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
 export async function GET(req: Request) {
+  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
   const { searchParams } = new URL(req.url);
   const userId = searchParams.get('userId');
   if (!userId) return NextResponse.json({ error: 'userId wajib' }, { status: 400 });

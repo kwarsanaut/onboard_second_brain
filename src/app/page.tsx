@@ -1,6 +1,77 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import Hero3D from '@/components/landing/Hero3D';
+
+const problems = [
+  {
+    color: '#ef4444', bg: 'bg-red-500/10', ring: 'ring-red-500/20',
+    title: 'Knowledge ikut resign',
+    body: 'Cara kerja, kontak penting, dan “trik” yang tidak terdokumentasi hilang begitu karyawan lama pergi.',
+    icon: (<><path d="M12 3v2m0 14v2M5 12H3m18 0h-2" strokeLinecap="round" /><circle cx="12" cy="12" r="4" /><path d="M8 8l-2-2m12 12l-2-2" strokeLinecap="round" /></>),
+  },
+  {
+    color: '#3b82f6', bg: 'bg-blue-500/10', ring: 'ring-blue-500/20',
+    title: 'Onboarding tidak konsisten',
+    body: 'Tiap manajer punya caranya sendiri. Pengalaman karyawan baru beda-beda dan mustahil diukur.',
+    icon: (<><path d="M4 7h7M4 12h11M4 17h6" strokeLinecap="round" /><path d="M17 8l3 3-3 3" strokeLinecap="round" strokeLinejoin="round" /></>),
+  },
+  {
+    color: '#a855f7', bg: 'bg-violet-500/10', ring: 'ring-violet-500/20',
+    title: 'Template terlalu generik',
+    body: 'Checklist umum tidak relevan — Backend Engineer dan Product Manager dapat tugas yang sama persis.',
+    icon: (<><rect x="8" y="8" width="12" height="12" rx="2" /><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2" /></>),
+  },
+  {
+    color: '#f59e0b', bg: 'bg-amber-500/10', ring: 'ring-amber-500/20',
+    title: 'HR buang waktu',
+    body: 'Menyusun & memperbarui checklist manual tiap ada posisi baru bisa makan waktu berhari-hari.',
+    icon: (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" strokeLinecap="round" strokeLinejoin="round" /></>),
+  },
+];
+
+const steps = [
+  {
+    n: '01', title: 'Upload handover',
+    body: 'Drop PDF, Word, atau catatan teks dari karyawan lama — atau ketik manual. Satu posisi, satu klik.',
+  },
+  {
+    n: '02', title: 'AI menyusun',
+    body: 'AI mengekstrak tugas, tools, proses, dan target 30/60/90 hari menjadi checklist spesifik per posisi.',
+  },
+  {
+    n: '03', title: 'Karyawan jalan & terlacak',
+    body: 'Pengganti mencentang progres dan menambah catatan; HR memantau perkembangan secara real-time.',
+  },
+];
+
+const features = [
+  {
+    title: 'Generate dari dokumen', accent: 'text-orange-500',
+    body: 'Baca konteks pekerjaan nyata dari .pdf / .docx / teks, bukan asumsi.',
+    icon: (<><path d="M9 13h6m-3-3v6" strokeLinecap="round" /><path d="M14 3v5h5" /><path d="M19 8.5V19a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2h7.5L19 8.5z" /></>),
+  },
+  {
+    title: 'LLM Wiki — merge, bukan timpa', accent: 'text-emerald-500',
+    body: 'Dokumen baru memperkaya checklist lama. Versi naik otomatis, item lama tetap aman.',
+    icon: (<><path d="M12 3l9 5-9 5-9-5 9-5z" /><path d="M3 12l9 5 9-5M3 16l9 5 9-5" /></>),
+  },
+  {
+    title: 'Per posisi, bukan per departemen', accent: 'text-blue-500',
+    body: 'Tiap jabatan dapat checklist sendiri yang relevan dengan tugasnya.',
+    icon: (<><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="4" /><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none" /></>),
+  },
+  {
+    title: 'Asisten AI', accent: 'text-pink-500',
+    body: 'Karyawan baru bisa bertanya soal tugas & ekspektasi posisi, langsung dari checklist-nya.',
+    icon: (<><path d="M21 12a8 8 0 01-11.5 7.2L4 20l1-4.5A8 8 0 1121 12z" strokeLinejoin="round" /><path d="M9 11h6M9 14h4" strokeLinecap="round" /></>),
+  },
+  {
+    title: 'Kuis & Assessment', accent: 'text-amber-500',
+    body: 'Uji pemahaman onboarding dengan kuis yang dibuat otomatis dari checklist.',
+    icon: (<><path d="M9 11l3 3L22 4" strokeLinecap="round" strokeLinejoin="round" /><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" strokeLinecap="round" /></>),
+  },
+];
 
 export default async function Home() {
   const supabase = await createClient();
@@ -8,17 +79,18 @@ export default async function Home() {
   if (user) redirect(user.user_metadata?.role === 'hr' ? '/hr' : '/employee');
 
   return (
-    <div className="bg-white min-h-screen text-stone-900" style={{ fontFamily: 'var(--font-space, system-ui, sans-serif)' }}>
+    <div className="bg-white text-stone-900" style={{ fontFamily: 'var(--font-space, system-ui, sans-serif)' }}>
 
-      {/* ── Sticky Nav ── */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-stone-100 flex items-center justify-between px-6 md:px-12 h-16">
+      {/* ── Nav ── */}
+      <header className="sticky top-0 z-50 bg-white/85 backdrop-blur border-b border-stone-100 flex items-center justify-between px-6 md:px-12 h-16">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white font-black text-sm">O</div>
-          <span className="font-black text-stone-900 text-sm tracking-tight">OnboardKit</span>
+          <span className="font-black text-sm tracking-tight">OnboardKit</span>
         </div>
         <nav className="hidden md:flex items-center gap-8 text-sm text-stone-500">
+          <a href="#masalah" className="hover:text-stone-900 transition-colors">Masalah</a>
+          <a href="#solusi" className="hover:text-stone-900 transition-colors">Solusi</a>
           <a href="#fitur" className="hover:text-stone-900 transition-colors">Fitur</a>
-          <a href="#cara-kerja" className="hover:text-stone-900 transition-colors">Cara Kerja</a>
           <Link href="/login" className="hover:text-stone-900 transition-colors">Masuk</Link>
         </nav>
         <Link href="/register" className="h-9 px-5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-lg transition-colors">
@@ -27,258 +99,185 @@ export default async function Home() {
       </header>
 
       {/* ── Hero ── */}
-      <section className="px-6 md:px-12 pt-20 pb-0 overflow-hidden">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left: Copy */}
-          <div className="pb-20">
-            <div className="inline-flex items-center gap-2 bg-orange-50 border border-orange-200 text-orange-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-8">
+      <section className="relative px-6 md:px-12 pt-16 pb-24 overflow-hidden">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-6 items-center">
+          <div className="motion-safe-anim" style={{ animation: 'riseIn .7s ease-out both' }}>
+            <div className="inline-flex items-center gap-2 bg-orange-50 border border-orange-200 text-orange-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-7">
               <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-              AI-powered onboarding
+              Onboarding berbasis AI
             </div>
-            <h1 className="text-5xl md:text-6xl font-black leading-[1.05] tracking-tight text-stone-900 mb-6">
-              Onboarding checklist<br />
-              dari handover<br />
-              <span className="text-orange-500">yang nyata.</span>
+            <h1 className="text-[2.6rem] leading-[1.05] sm:text-5xl md:text-6xl font-black tracking-tight mb-6">
+              Knowledge yang ikut <span className="text-stone-400 line-through decoration-stone-300">resign</span>,
+              <br />sekarang <span className="text-orange-500">tetap tinggal.</span>
             </h1>
-            <p className="text-stone-500 text-xl leading-relaxed mb-10 max-w-lg">
-              Upload dokumen handover karyawan lama. AI extract konteks pekerjaan dan generate checklist yang spesifik — per posisi, bukan template generik.
+            <p className="text-stone-500 text-lg md:text-xl leading-relaxed mb-9 max-w-xl">
+              OnboardKit membaca dokumen handover dari karyawan yang pergi, lalu menyusun
+              checklist onboarding <span className="text-stone-800 font-semibold">spesifik per posisi</span> — bukan template generik.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/register" className="h-12 px-8 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 text-base shadow-lg shadow-orange-200">
                 Mulai Gratis
-                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
               </Link>
-              <Link href="/login" className="h-12 px-8 border border-stone-200 hover:border-stone-300 text-stone-600 hover:text-stone-900 font-medium rounded-xl transition-all flex items-center justify-center text-base">
-                Sudah punya akun
-              </Link>
+              <a href="#solusi" className="h-12 px-8 border border-stone-200 hover:border-stone-300 text-stone-600 hover:text-stone-900 font-medium rounded-xl transition-all flex items-center justify-center text-base">
+                Lihat cara kerja
+              </a>
             </div>
+            <p className="text-xs text-stone-400 mt-5">Gratis · tanpa kartu kredit · checklist siap dalam &lt; 2 menit</p>
           </div>
 
-          {/* Right: Product Mockup */}
-          <div className="relative lg:h-[600px] flex items-end justify-center">
-            <div className="w-full max-w-md bg-white rounded-2xl border border-stone-200 shadow-2xl shadow-stone-200/60 overflow-hidden">
-              {/* Window chrome */}
-              <div className="flex items-center gap-1.5 px-4 py-3 bg-stone-50 border-b border-stone-100">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-400/70" />
-                <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/70" />
-                <div className="w-2.5 h-2.5 rounded-full bg-green-400/70" />
-                <div className="flex-1 mx-3 bg-stone-100 rounded-md h-5 flex items-center px-2">
-                  <span className="text-[10px] text-stone-400">onboardkit.app/employee/andi</span>
+          {/* 3D scene */}
+          <Hero3D />
+        </div>
+      </section>
+
+      {/* ── Problem (dark) ── */}
+      <section id="masalah" className="px-6 md:px-12 py-24 bg-stone-950 text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-2xl mb-14">
+            <p className="text-xs font-bold text-orange-400 uppercase tracking-widest mb-4">Masalahnya</p>
+            <h2 className="text-3xl md:text-5xl font-black leading-tight tracking-tight mb-5">
+              Setiap orang resign, sebagian perusahaan ikut lupa caranya kerja.
+            </h2>
+            <p className="text-stone-400 text-lg leading-relaxed">
+              Onboarding yang buruk bukan soal kurang ramah — tapi soal pengetahuan yang tidak pernah benar-benar diserahkan.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {problems.map((p) => (
+              <div key={p.title} className="group bg-white/[0.04] border border-white/[0.08] rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/[0.06]">
+                <div className={`w-11 h-11 rounded-xl ${p.bg} ring-1 ${p.ring} flex items-center justify-center mb-5`}>
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke={p.color} strokeWidth={1.8}>{p.icon}</svg>
                 </div>
+                <h3 className="text-base font-bold mb-2">{p.title}</h3>
+                <p className="text-sm text-stone-400 leading-relaxed">{p.body}</p>
               </div>
-              {/* Checklist content */}
-              <div className="p-5">
-                <div className="flex items-center justify-between mb-1">
-                  <div>
-                    <p className="text-xs text-stone-400 font-medium">Backend Engineer · Engineering</p>
-                    <p className="text-sm font-bold text-stone-800 mt-0.5">Andi Pratama</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-black text-orange-500">75%</p>
-                    <p className="text-[10px] text-stone-400">9 / 12 selesai</p>
-                  </div>
-                </div>
-                <div className="h-1.5 bg-stone-100 rounded-full mb-5 mt-3">
-                  <div className="h-full w-3/4 bg-orange-500 rounded-full" />
-                </div>
-                <div className="space-y-2">
-                  {[
-                    { done: true,  text: 'Review arsitektur sistem & dokumentasi teknis' },
-                    { done: true,  text: 'Setup environment lokal (Docker, env vars)' },
-                    { done: true,  text: 'Kenalan dengan tim Backend (Slack, 1-on-1)' },
-                    { done: true,  text: 'Shadow standup pertama bersama tim' },
-                    { done: false, text: 'Review open PRs dan backlog sprint aktif' },
-                    { done: false, text: 'Baca handover notes dari Budi Santoso' },
-                    { done: false, text: 'Meeting 1-on-1 dengan Engineering Manager' },
-                  ].map((item, i) => (
-                    <div key={i} className={`flex items-start gap-3 p-2.5 rounded-lg ${item.done ? 'bg-orange-50' : 'hover:bg-stone-50'}`}>
-                      <div className={`w-4 h-4 rounded border flex-shrink-0 mt-0.5 flex items-center justify-center ${item.done ? 'bg-orange-500 border-orange-500' : 'border-stone-300'}`}>
-                        {item.done && <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3 5.5L6.5 2.5" stroke="white" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                      </div>
-                      <p className={`text-xs leading-relaxed ${item.done ? 'line-through text-stone-400' : 'text-stone-700'}`}>{item.text}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 pt-4 border-t border-stone-100 flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-full bg-stone-100 border border-stone-200 flex items-center justify-center text-[9px] font-bold text-stone-500">B</div>
-                  <p className="text-[10px] text-stone-400">Menggantikan <span className="font-semibold text-stone-500">Budi Santoso</span></p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── Feature 1: Generate from docs ── */}
-      <section id="fitur" className="px-6 md:px-12 py-28 border-t border-stone-100">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <div>
-            <p className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Generate AI</p>
-            <h2 className="text-4xl md:text-5xl font-black text-stone-900 leading-tight mb-6">
-              Upload sekali.<br />Checklist langsung<br />jadi.
+      {/* ── Solution / How it works ── */}
+      <section id="solusi" className="px-6 md:px-12 py-24 border-b border-stone-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-2xl mb-14">
+            <p className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Solusinya</p>
+            <h2 className="text-3xl md:text-5xl font-black leading-tight tracking-tight text-stone-900 mb-5">
+              Dari dokumen mentah ke checklist siap-jalan, dalam 3 langkah.
             </h2>
-            <p className="text-stone-500 text-lg leading-relaxed mb-8">
-              Upload PDF atau Word dari karyawan yang pergi. AI baca konteks pekerjaan nyata — tugas, tools, kontak penting — dan jadikan checklist untuk penggantinya. Tidak ada yang perlu diketik manual.
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5" style={{ perspective: '1200px' }}>
+            {steps.map((s, i) => (
+              <div
+                key={s.n}
+                className="scene-3d relative bg-white border border-stone-200 rounded-2xl p-7 shadow-sm transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl"
+                style={{ transform: `rotateY(${(i - 1) * 4}deg)` }}
+              >
+                <div className="flex items-center gap-3 mb-5">
+                  <span className="text-3xl font-black text-orange-500/90">{s.n}</span>
+                  <span className="flex-1 h-px bg-gradient-to-r from-orange-200 to-transparent" />
+                </div>
+                <h3 className="text-lg font-black text-stone-900 mb-2.5">{s.title}</h3>
+                <p className="text-sm text-stone-500 leading-relaxed">{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Knowledge Graph highlight ── */}
+      <section className="px-6 md:px-12 py-24 bg-stone-50 border-b border-stone-100">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <p className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Knowledge Graph</p>
+            <h2 className="text-3xl md:text-5xl font-black leading-tight tracking-tight text-stone-900 mb-5">
+              Lihat seluruh pengetahuan tim sebagai satu peta.
+            </h2>
+            <p className="text-stone-500 text-lg leading-relaxed mb-7">
+              Setiap departemen, posisi, wiki, item, dan karyawan terhubung dalam satu graph interaktif.
+              Telusuri relasinya — siapa menggantikan siapa, knowledge apa dipakai di posisi mana.
             </p>
             <ul className="space-y-3">
-              {['Mendukung .pdf, .docx, dan input teks manual', 'Pilih dari Groq Llama atau Qwen sebagai model AI', 'Selesai dalam kurang dari 2 menit'].map(t => (
+              {['Peta relasi seluruh organisasi', 'Hover untuk menyorot koneksi terkait', 'Klik node untuk langsung membuka detailnya'].map((t) => (
                 <li key={t} className="flex items-center gap-3 text-sm text-stone-600">
-                  <div className="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2L8 3" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  </div>
+                  <span className="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2L8 3" stroke="#f97316" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </span>
                   {t}
                 </li>
               ))}
             </ul>
           </div>
-          {/* Upload mock */}
-          <div className="bg-stone-50 border border-stone-200 rounded-2xl p-6">
-            <p className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-5">Generate Checklist</p>
-            <div className="space-y-3 mb-5">
-              <div className="bg-white border border-stone-200 rounded-xl p-4">
-                <p className="text-xs text-stone-400 mb-1">Posisi</p>
-                <p className="text-sm font-semibold text-stone-800">Backend Engineer</p>
-              </div>
-              <div className="bg-white border border-stone-200 rounded-xl p-4">
-                <p className="text-xs text-stone-400 mb-1">Menggantikan</p>
-                <p className="text-sm font-semibold text-stone-800">Budi Santoso</p>
-              </div>
-              <div className="bg-white border-2 border-dashed border-orange-200 rounded-xl p-5 flex flex-col items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#f97316" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                </div>
-                <p className="text-xs font-semibold text-stone-600">handover_budi.pdf</p>
-                <p className="text-[10px] text-stone-400">234 KB · siap diproses</p>
-              </div>
-            </div>
-            <button className="w-full h-10 bg-orange-500 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2">
-              <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4"/><path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8v8z"/></svg>
-              AI sedang memproses...
-            </button>
+          {/* mini constellation */}
+          <div className="relative rounded-2xl bg-stone-950 border border-white/10 h-[320px] overflow-hidden shadow-2xl shadow-stone-400/30">
+            <svg viewBox="0 0 400 320" className="w-full h-full">
+              <g stroke="rgba(168,162,158,0.25)" strokeWidth="1">
+                <line x1="200" y1="160" x2="110" y2="80" /><line x1="200" y1="160" x2="300" y2="90" />
+                <line x1="200" y1="160" x2="120" y2="240" /><line x1="200" y1="160" x2="300" y2="230" />
+                <line x1="110" y1="80" x2="60" y2="150" /><line x1="300" y1="90" x2="350" y2="160" />
+                <line x1="120" y1="240" x2="80" y2="180" /><line x1="300" y1="230" x2="340" y2="250" />
+                <line x1="110" y1="80" x2="190" y2="60" /><line x1="300" y1="90" x2="240" y2="60" />
+              </g>
+              {[
+                { x: 200, y: 160, r: 13, c: '#f97316' }, { x: 110, y: 80, r: 9, c: '#3b82f6' },
+                { x: 300, y: 90, r: 9, c: '#3b82f6' }, { x: 120, y: 240, r: 8, c: '#a855f7' },
+                { x: 300, y: 230, r: 8, c: '#a855f7' }, { x: 60, y: 150, r: 5, c: '#10b981' },
+                { x: 350, y: 160, r: 5, c: '#10b981' }, { x: 80, y: 180, r: 5, c: '#ec4899' },
+                { x: 340, y: 250, r: 5, c: '#eab308' }, { x: 190, y: 60, r: 5, c: '#64748b' },
+                { x: 240, y: 60, r: 5, c: '#64748b' },
+              ].map((n, i) => (
+                <circle key={i} cx={n.x} cy={n.y} r={n.r} fill={n.c}
+                  className="motion-safe-anim" style={{ transformOrigin: `${n.x}px ${n.y}px`, animation: `floatYsm ${5 + (i % 3)}s ease-in-out ${i * 0.3}s infinite` }} />
+              ))}
+            </svg>
+            <div className="absolute bottom-3 left-4 text-[11px] text-stone-500">/hr/graph</div>
           </div>
         </div>
       </section>
 
-      {/* ── Feature 2: LLM Wiki ── */}
-      <section className="px-6 md:px-12 py-28 bg-stone-50 border-y border-stone-100">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          {/* Wiki mock */}
-          <div className="order-2 lg:order-1 bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
-            <div className="px-5 py-3 border-b border-stone-100 flex items-center justify-between">
-              <p className="text-xs font-bold text-stone-500">Wiki Checklist · Backend Engineer</p>
-              <div className="flex items-center gap-1.5 text-[10px] text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full font-semibold">
-                <span className="w-1 h-1 rounded-full bg-emerald-500" />
-                v3 · diperbarui
+      {/* ── Features ── */}
+      <section id="fitur" className="px-6 md:px-12 py-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-2xl mb-14">
+            <p className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Kemampuan</p>
+            <h2 className="text-3xl md:text-5xl font-black leading-tight tracking-tight text-stone-900">
+              Lebih dari sekadar checklist.
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {features.map((f) => (
+              <div key={f.title} className="group bg-white border border-stone-200 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-stone-300">
+                <div className="w-11 h-11 rounded-xl bg-stone-50 border border-stone-100 flex items-center justify-center mb-5 transition-colors group-hover:bg-orange-50">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} className={f.accent} stroke="currentColor">{f.icon}</svg>
+                </div>
+                <h3 className="text-base font-bold text-stone-900 mb-2">{f.title}</h3>
+                <p className="text-sm text-stone-500 leading-relaxed">{f.body}</p>
               </div>
-            </div>
-            <div className="p-5 space-y-2">
-              {[
-                { tag: 'lama', text: 'Review dokumentasi arsitektur microservices' },
-                { tag: 'lama', text: 'Setup Kubernetes local via minikube' },
-                { tag: 'baru', text: 'Pelajari migration ke GraphQL (dari handover terbaru)' },
-                { tag: 'baru', text: 'Ikuti weekly sync dengan tim Platform Engineering' },
-                { tag: 'lama', text: 'Review runbook on-call dan alert channels' },
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3 p-2.5 rounded-lg bg-stone-50">
-                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded flex-shrink-0 mt-0.5 ${item.tag === 'baru' ? 'bg-orange-100 text-orange-600' : 'bg-stone-100 text-stone-400'}`}>
-                    {item.tag === 'baru' ? 'BARU' : 'ADA'}
-                  </span>
-                  <p className="text-xs text-stone-700 leading-relaxed">{item.text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* Text */}
-          <div className="order-1 lg:order-2">
-            <p className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">LLM Wiki</p>
-            <h2 className="text-4xl md:text-5xl font-black text-stone-900 leading-tight mb-6">
-              Upload dokumen<br />baru — checklist<br />makin lengkap.
-            </h2>
-            <p className="text-stone-500 text-lg leading-relaxed">
-              Setiap dokumen baru yang diupload memperkaya checklist yang sudah ada. Bukan menimpa — tapi merge. Checklist posisi Backend Engineer versi 1 akan diperbarui otomatis saat ada dokumen baru, tanpa kehilangan item yang sudah ada sebelumnya.
-            </p>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── Feature 3: Per posisi ── */}
-      <section id="cara-kerja" className="px-6 md:px-12 py-28 border-b border-stone-100">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <div>
-            <p className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-4">Per Posisi</p>
-            <h2 className="text-4xl md:text-5xl font-black text-stone-900 leading-tight mb-6">
-              Setiap jabatan<br />checklist-nya<br />berbeda.
-            </h2>
-            <p className="text-stone-500 text-lg leading-relaxed mb-8">
-              Software Engineer dan Product Manager di departemen yang sama punya tugas onboarding yang sangat berbeda. OnboardKit buat checklist per posisi — bukan per departemen seperti template biasa.
-            </p>
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { pos: 'Backend Engineer', items: 12 },
-                { pos: 'Product Manager', items: 9 },
-                { pos: 'Data Scientist', items: 11 },
-                { pos: 'UX Designer', items: 8 },
-              ].map(p => (
-                <div key={p.pos} className="bg-stone-50 border border-stone-200 rounded-xl p-3">
-                  <p className="text-xs font-bold text-stone-700">{p.pos}</p>
-                  <p className="text-[11px] text-stone-400 mt-0.5">{p.items} checklist items</p>
-                </div>
-              ))}
+      {/* ── CTA ── */}
+      <section className="px-6 md:px-12 pb-24">
+        <div className="max-w-7xl mx-auto rounded-3xl bg-stone-950 px-8 md:px-16 py-16 relative overflow-hidden">
+          <div className="pointer-events-none absolute -right-20 -top-20 w-72 h-72 rounded-full blur-3xl opacity-40" style={{ background: 'radial-gradient(closest-side, rgba(249,115,22,0.35), transparent)' }} />
+          <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-10">
+            <div>
+              <h2 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4">
+                Mulai pertahankan<br /><span className="text-orange-400">knowledge tim kamu.</span>
+              </h2>
+              <p className="text-stone-400 text-lg">Gratis untuk dicoba. Setup dalam hitungan menit.</p>
             </div>
-          </div>
-          {/* HR Dashboard mock */}
-          <div className="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
-            <div className="px-5 py-3 border-b border-stone-100">
-              <p className="text-xs font-bold text-stone-500">Manager Dashboard · Engineering</p>
+            <div className="flex flex-col gap-3 flex-shrink-0">
+              <Link href="/register" className="h-12 px-10 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 text-base shadow-lg shadow-orange-500/20">
+                Mulai Gratis
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+              </Link>
+              <Link href="/login" className="h-12 px-10 bg-white/10 hover:bg-white/15 text-stone-300 hover:text-white font-medium rounded-xl transition-colors flex items-center justify-center text-base">
+                Sudah punya akun
+              </Link>
             </div>
-            <div className="p-5 space-y-3">
-              {[
-                { pos: 'Backend Engineer', rev: 3, users: 2, progress: 75 },
-                { pos: 'Frontend Engineer', rev: 2, users: 1, progress: 40 },
-                { pos: 'DevOps Engineer', rev: 1, users: 0, progress: 0 },
-                { pos: 'Engineering Manager', rev: 2, users: 1, progress: 100 },
-              ].map(p => (
-                <div key={p.pos} className="flex items-center justify-between p-3 rounded-xl border border-stone-100 hover:border-stone-200 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center text-xs font-black text-orange-600">
-                      {p.pos[0]}
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-stone-800">{p.pos}</p>
-                      <p className="text-[10px] text-stone-400">v{p.rev} · {p.users} karyawan aktif</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-16 h-1.5 bg-stone-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-orange-400 rounded-full" style={{ width: `${p.progress}%` }} />
-                    </div>
-                    <span className={`text-[10px] font-bold w-7 text-right ${p.progress === 100 ? 'text-emerald-500' : 'text-stone-400'}`}>{p.progress}%</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Final CTA ── */}
-      <section className="px-6 md:px-12 py-28 bg-stone-900">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-10">
-          <div>
-            <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
-              Siap onboarding<br />
-              <span className="text-orange-400">lebih efektif?</span>
-            </h2>
-            <p className="text-stone-400 text-lg">Gratis. Tidak perlu kartu kredit.</p>
-          </div>
-          <div className="flex flex-col gap-3 flex-shrink-0">
-            <Link href="/register" className="h-12 px-10 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 text-base shadow-lg shadow-orange-500/20">
-              Mulai Gratis
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
-            </Link>
-            <Link href="/login" className="h-12 px-10 bg-white/10 hover:bg-white/15 text-stone-300 hover:text-white font-medium rounded-xl transition-colors flex items-center justify-center text-base">
-              Sudah punya akun
-            </Link>
           </div>
         </div>
       </section>
@@ -295,7 +294,6 @@ export default async function Home() {
           <span className="text-stone-300">© 2026 OnboardKit</span>
         </div>
       </footer>
-
     </div>
   );
 }

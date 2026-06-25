@@ -21,27 +21,38 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
+  const isApi = pathname.startsWith('/api/');
 
-  // Public routes
-  const publicPaths = ['/', '/login', '/register', '/auth/callback'];
-  if (publicPaths.some(p => pathname === p || pathname.startsWith('/auth/'))) {
+  // Public pages (the API is never treated as a public page)
+  const publicPaths = ['/', '/login', '/register'];
+  if (!isApi && (publicPaths.includes(pathname) || pathname.startsWith('/auth/'))) {
     return supabaseResponse;
   }
 
-  // Not logged in → redirect to login
+  // Not authenticated → 401 for API, redirect for pages
   if (!user) {
+    if (isApi) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // Get role from user metadata
+  // Role from user metadata
   const role = user.user_metadata?.role ?? 'employee';
 
-  // HR routes protection
+  // Authenticated API requests
+  if (isApi) {
+    // Org-wide knowledge graph is HR-only
+    if (pathname.startsWith('/api/graph') && role !== 'hr') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+    return supabaseResponse;
+  }
+
+  // HR pages protection
   if (pathname.startsWith('/hr') && role !== 'hr') {
     return NextResponse.redirect(new URL('/employee', request.url));
   }
 
-  // Employee routes protection
+  // Employee pages protection
   if (pathname.startsWith('/employee') && role === 'hr') {
     return NextResponse.redirect(new URL('/hr', request.url));
   }
@@ -50,5 +61,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };

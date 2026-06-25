@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
 export async function POST(req: Request) {
   try {
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
     const { messages, context } = await req.json();
 
     const systemPrompt = `Kamu adalah asisten onboarding personal untuk ${context.userName}, yang baru bergabung sebagai ${context.positionName} di departemen ${context.departmentName}.
