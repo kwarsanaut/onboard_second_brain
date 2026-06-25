@@ -26,6 +26,15 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
       .catch(() => setState('result'));
   }, [userId]);
 
+  // Putar audio saat semua assessment selesai (layar hasil)
+  useEffect(() => {
+    if (state !== 'result') return;
+    const audio = new Audio('/hidup-jokowi.mp3');
+    audio.volume = 0.8;
+    audio.play().catch(() => {});
+    return () => { audio.pause(); };
+  }, [state]);
+
   function confirm() {
     if (!selected) return;
     const q = questions[current];
