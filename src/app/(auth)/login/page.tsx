@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
@@ -91,5 +91,30 @@ function LoginForm() {
 }
 
 export default function LoginPage() {
+  // Backsound halaman login (Akatsuki / Pain theme)
+  useEffect(() => {
+    const audio = new Audio('/akatsuki-pain.mp3');
+    audio.loop = true;
+    audio.volume = 0.5;
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      audio.play().catch(() => {});
+      window.removeEventListener('pointerdown', start);
+      window.removeEventListener('keydown', start);
+    };
+    // Coba autoplay; kalau diblokir browser, mulai saat interaksi pertama
+    audio.play().then(() => { started = true; }).catch(() => {
+      window.addEventListener('pointerdown', start);
+      window.addEventListener('keydown', start);
+    });
+    return () => {
+      audio.pause();
+      window.removeEventListener('pointerdown', start);
+      window.removeEventListener('keydown', start);
+    };
+  }, []);
+
   return <Suspense><LoginForm /></Suspense>;
 }

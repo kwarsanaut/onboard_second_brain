@@ -45,10 +45,10 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
     setAnswers(prev => [...prev, { q, picked: selected, correct }]);
     setConfirmed(true);
     answerAudioRef.current?.pause();
+    const correctSounds = ['/jokowi-saya-masih-sanggup-2.mp3', '/click-nice.mp3'];
     const wrongSounds = ['/jokowi-saya-akan-lawan.mp3', '/yo-ndak-tau.mp3'];
-    const src = correct
-      ? '/jokowi-saya-masih-sanggup-2.mp3'
-      : wrongSounds[Math.floor(Math.random() * wrongSounds.length)];
+    const pool = correct ? correctSounds : wrongSounds;
+    const src = pool[Math.floor(Math.random() * pool.length)];
     const audio = new Audio(src);
     answerAudioRef.current = audio;
     audio.play().catch(() => {});
