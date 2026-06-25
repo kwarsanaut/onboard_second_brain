@@ -1,5 +1,5 @@
 'use client';
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { QuizQuestion } from '@/types';
 import { cn } from '@/lib/utils';
@@ -15,6 +15,8 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
   const [confirmed, setConfirmed] = useState(false);
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState<{ q: QuizQuestion; picked: string; correct: boolean }[]>([]);
+  const [wrongPopup, setWrongPopup] = useState(false);
+  const wrongVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     fetch(`/api/assessment/generate?userId=${userId}`)
@@ -35,6 +37,15 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
     return () => { audio.pause(); };
   }, [state]);
 
+  // Putar video "kalah" dengan suara saat popup salah muncul
+  useEffect(() => {
+    if (wrongPopup && wrongVideoRef.current) {
+      wrongVideoRef.current.muted = false;
+      wrongVideoRef.current.currentTime = 0;
+      wrongVideoRef.current.play().catch(() => {});
+    }
+  }, [wrongPopup]);
+
   function confirm() {
     if (!selected) return;
     const q = questions[current];
@@ -42,9 +53,11 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
     if (correct) setScore(s => s + 1);
     setAnswers(prev => [...prev, { q, picked: selected, correct }]);
     setConfirmed(true);
+    setWrongPopup(!correct);
   }
 
   function next() {
+    setWrongPopup(false);
     if (current + 1 >= questions.length) {
       setState('result');
     } else {
@@ -190,13 +203,6 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
           })}
         </div>
 
-        {/* Reaksi kalau jawaban salah */}
-        {confirmed && selected !== q.correctAnswer && (
-          <div className="mb-5 rounded-2xl overflow-hidden border border-red-200 bg-black">
-            <video src="/lawan-final.mp4" autoPlay loop muted playsInline controls className="w-full max-h-56 object-contain" />
-          </div>
-        )}
-
         {/* Explanation */}
         {confirmed && q.explanation && (
           <div className="mb-5 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3">
@@ -215,6 +221,21 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
             className="w-full h-12 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl transition-all text-sm">
             {current + 1 >= questions.length ? 'Lihat Hasil →' : 'Soal Berikutnya →'}
           </button>
+        )}
+
+        {/* Popup video saat jawaban salah (bersuara) */}
+        {wrongPopup && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4" onClick={() => setWrongPopup(false)}>
+            <div className="relative w-full max-w-sm bg-stone-900 rounded-2xl overflow-hidden shadow-2xl border border-red-500/40" onClick={e => e.stopPropagation()}>
+              <button onClick={() => setWrongPopup(false)}
+                className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center text-sm">✕</button>
+              <p className="text-center text-red-400 text-sm font-black pt-3 pb-1">SALAH! ❌</p>
+              <video ref={wrongVideoRef} src="/lawan-final.mp4" autoPlay loop playsInline controls
+                className="w-full max-h-[60vh] object-contain bg-black" />
+              <button onClick={() => setWrongPopup(false)}
+                className="w-full h-11 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold transition-colors">Lanjut</button>
+            </div>
+          </div>
         )}
       </div>
     );
