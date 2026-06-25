@@ -181,6 +181,13 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
           })}
         </div>
 
+        {/* Reaksi kalau jawaban salah */}
+        {confirmed && selected !== q.correctAnswer && (
+          <div className="mb-5 rounded-2xl overflow-hidden border border-red-200 bg-black">
+            <video src="/lawan-final.mp4" autoPlay loop muted playsInline controls className="w-full max-h-56 object-contain" />
+          </div>
+        )}
+
         {/* Explanation */}
         {confirmed && q.explanation && (
           <div className="mb-5 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3">
@@ -222,8 +229,16 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
         </p>
       </div>
 
+      {/* Reaksi kalau gagal (skor < 60%) */}
+      {pct < 60 && (
+        <div className="mb-8 rounded-2xl overflow-hidden border border-red-200 bg-black">
+          <video src="/lawan-final.mp4" autoPlay loop muted playsInline controls className="w-full max-h-80 object-contain" />
+        </div>
+      )}
+
       {/* Score breakdown */}
       <div className="grid grid-cols-2 gap-3 mb-8">
+
         {teamTotal > 0 && (
           <div className="bg-white border border-stone-200 rounded-2xl p-5 text-center">
             <p className="text-2xl font-black text-stone-900">{teamScore}/{teamTotal}</p>
