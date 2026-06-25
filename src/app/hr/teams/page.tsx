@@ -16,14 +16,14 @@ export default function TeamsPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetch('/api/departments').then(r => r.json()).then(setDepartments);
+    fetch('/api/departments', { cache: 'no-store' }).then(r => r.json()).then(setDepartments);
   }, []);
 
   useEffect(() => {
     if (!selectedDept) { setMembers([]); return; }
     setLoading(true);
-    fetch(`/api/team-members?departmentId=${selectedDept}`)
-      .then(r => r.json()).then(d => { setMembers(d); setLoading(false); });
+    fetch(`/api/team-members?departmentId=${selectedDept}`, { cache: 'no-store' })
+      .then(r => r.json()).then(d => { setMembers(Array.isArray(d) ? d : []); setLoading(false); });
   }, [selectedDept]);
 
   function handlePhoto(file: File) {

@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const departmentId = searchParams.get('departmentId');
   if (!departmentId) return NextResponse.json({ error: 'departmentId wajib' }, { status: 400 });
-  return NextResponse.json(await getTeamMembers(departmentId));
+  return NextResponse.json(await getTeamMembers(departmentId), { headers: { 'Cache-Control': 'no-store' } });
 }
 
 export async function POST(req: Request) {
