@@ -15,7 +15,7 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
   const [confirmed, setConfirmed] = useState(false);
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState<{ q: QuizQuestion; picked: string; correct: boolean }[]>([]);
-  const wrongAudioRef = useRef<HTMLAudioElement | null>(null);
+  const answerAudioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     fetch(`/api/assessment/generate?userId=${userId}`)
@@ -27,14 +27,15 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
       .catch(() => setState('result'));
   }, [userId]);
 
-  // Putar audio saat semua assessment selesai (layar hasil)
+  // Putar audio saat layar hasil — beda untuk lulus vs gagal
   useEffect(() => {
     if (state !== 'result') return;
-    const audio = new Audio('/hidup-jokowi.mp3');
+    const pct = questions.length > 0 ? (score / questions.length) * 100 : 0;
+    const audio = new Audio(pct < 60 ? '/tamatlah-sudah.mp3' : '/hidup-jokowi.mp3');
     audio.volume = 0.8;
     audio.play().catch(() => {});
     return () => { audio.pause(); };
-  }, [state]);
+  }, [state, score, questions.length]);
 
   function confirm() {
     if (!selected) return;
@@ -43,16 +44,18 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
     if (correct) setScore(s => s + 1);
     setAnswers(prev => [...prev, { q, picked: selected, correct }]);
     setConfirmed(true);
-    if (!correct) {
-      wrongAudioRef.current?.pause();
-      const audio = new Audio('/jokowi-saya-akan-lawan.mp3');
-      wrongAudioRef.current = audio;
-      audio.play().catch(() => {});
-    }
+    answerAudioRef.current?.pause();
+    const wrongSounds = ['/jokowi-saya-akan-lawan.mp3', '/yo-ndak-tau.mp3'];
+    const src = correct
+      ? '/jokowi-saya-masih-sanggup-2.mp3'
+      : wrongSounds[Math.floor(Math.random() * wrongSounds.length)];
+    const audio = new Audio(src);
+    answerAudioRef.current = audio;
+    audio.play().catch(() => {});
   }
 
   function next() {
-    wrongAudioRef.current?.pause();
+    answerAudioRef.current?.pause();
     if (current + 1 >= questions.length) {
       setState('result');
     } else {
@@ -239,13 +242,6 @@ export default function AssessmentPage({ params }: { params: Promise<{ userId: s
           {pct >= 80 ? 'Luar biasa! Kamu siap onboarding.' : pct >= 60 ? 'Bagus! Ada beberapa yang perlu dipelajari lagi.' : 'Masih perlu banyak belajar — cek kembali checklistmu.'}
         </p>
       </div>
-
-      {/* Reaksi kalau gagal (skor < 60%) */}
-      {pct < 60 && (
-        <div className="mb-8 rounded-2xl overflow-hidden border border-red-200 bg-black">
-          <video src="/lawan-final.mp4" autoPlay loop muted playsInline controls className="w-full max-h-80 object-contain" />
-        </div>
-      )}
 
       {/* Score breakdown */}
       <div className="grid grid-cols-2 gap-3 mb-8">
